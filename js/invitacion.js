@@ -38,7 +38,7 @@
   if (!audio) return;
 
   function reproducirBajoVolumen() {
-    audio.volume = 0.3;
+    audio.volume = 0.2;
     const p = audio.play();
     if (p) p.catch(() => {});
     btn?.classList.remove('muted');
@@ -291,6 +291,9 @@ const modalContents = {
       <label for="rsvp-phone">Teléfono / WhatsApp</label>
       <input type="tel" id="rsvp-phone" required placeholder="300 000 0000">
 
+      <label for="rsvp-guests">Número de invitados</label>
+      <input type="number" id="rsvp-guests" min="1" max="10" value="1">
+
       <label for="rsvp-message">Dejame un mensaje con tus buenos deseos (opcional)</label>
       <textarea id="rsvp-message" placeholder="Tus mejores deseos para este gran día"></textarea>
 
@@ -334,7 +337,7 @@ function handleRSVP(e) {
 
   const text = `¡Hola Ana Sofia!%0A%0AConfirmo mi asistencia:%0A👤 Nombre: ${encodeURIComponent(name)}%0A📱 Tel: ${encodeURIComponent(phone)}%0A👥 Invitados: ${guests}%0A📝 Mensaje: ${encodeURIComponent(message || 'Ninguno')}`;
 
-  window.open(`https://wa.me/57300XXXXXXXX?text=${text}`, '_blank');
+  window.open(`https://wa.me/573007698235?text=${text}`, '_blank');
 
   const btn = document.querySelector('#rsvp-form .btn');
   btn.textContent = '✓ ¡Gracias por confirmar!';

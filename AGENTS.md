@@ -63,7 +63,10 @@ audio/                 → Música de fondo (cancion.mp3)
 - **Modales**: sistema único reutilizable para mapa, dress code, tips, regalos, RSVP
 
 ## Pendientes / notas
-- `audio/cancion.mp3` **no existe aún**: colocar ahí la canción instrumental (formato .mp3). La portada y la invitación la reproducen en loop a volumen bajo (0.3); botón `#btn-audio` (superior derecha) activa/desactiva el sonido
-- Número WhatsApp en RSVP (`js/invitacion.js:handleRSVP`) — reemplazar `57300XXXXXXXX` por el número real
-- `test.css` no se usa; se puede eliminar
--`.claude/settings.json` contiene credenciales; **no commitear**
+- `audio/introViolin.mp3`: música de fondo real (portada e invitación la reproducen en loop a volumen bajo; botón `#btn-audio` superior derecha activa/desactiva el sonido)
+- Número WhatsApp en RSVP (`js/invitacion.js:handleRSVP`) ya configurado: `573007698235`
+- `.claude/settings.json` contiene credenciales; **no commitear**
+
+## Despliegue
+- Repo git en `main`, con workflow `.github/workflows/deploy-pages.yml` (GitHub Actions → GitHub Pages)
+- El workflow arma la estructura en `_site` (html + css + js + img + audio en raíz) porque las rutas son relativas (`../css`, etc.)
