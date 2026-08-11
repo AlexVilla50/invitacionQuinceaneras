@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ana Sofia - Mis XV años</title>
+  <link rel="stylesheet" href="../css/invitacion.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="shortcut icon" href="../img/icono15.png" type="image/x-icon">
+</head>
+<body>
+
+  <!-- ===== TOGGLE AUDIO ===== -->
+  <button id="btn-audio" class="audio-toggle" aria-label="Activar o desactivar la música" aria-pressed="false">
+    <svg class="audio-icon audio-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 5 6 9H2v6h4l5 4z"/>
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+    </svg>
+    <svg class="audio-icon audio-icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 5 6 9H2v6h4l5 4z"/>
+      <line x1="22" y1="9" x2="16" y2="15"/>
+      <line x1="16" y1="9" x2="22" y2="15"/>
+    </svg>
+  </button>
+  <audio id="musica" src="../audio/cancion.mp3" loop preload="auto"></audio>
+
+  <!-- ===== MODAL OVERLAY ===== -->
+  <div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
+    <div class="modal" id="modal-content" role="dialog" aria-modal="true">
+      <button class="modal-close" onclick="closeModal()" aria-label="Cerrar">&times;</button>
+      <div class="modal-body" id="modal-body"></div>
+    </div>
+  </div>
+
+  <!-- ===== FIXED BACKGROUND (visible en toda la página) ===== -->
+  <div class="fixed-bg"></div>
+  <div class="fixed-bg-overlay"></div>
+
+  <!-- ===== STARRY SKY (parallax: estrellas y luna) ===== -->
+  <div class="parallax-sky" aria-hidden="true">
+    <div class="moon"></div>
+    <div class="shooting-star star-a"></div>
+    <div class="shooting-star star-b"></div>
+    <div class="star-field layer-1" id="stars-1"></div>
+    <div class="star-field layer-2" id="stars-2"></div>
+    <div class="star-field layer-3" id="stars-3"></div>
+  </div>
+
+  <!-- ===== SECTION 1: HERO ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <span class="hero-badge">Invitación</span>
+      <p class="hero-date">24 . 10 . 2026</p>
+      <h1 class="hero-name">Ana Sofia Villa Chica</h1>
+      <h2 class="hero-title">Mis XV años</h2>
+      <div class="hero-divider"></div>
+      <p class="hero-message">
+        Con el corazón lleno de alegría, los invito a celebrar mis quince años.
+        Este día tan especial quiero compartirlo con ustedes, mis seres queridos,
+        porque cada uno ha sido parte importante de mi historia.
+        Los espero con mucho cariño para crear juntos recuerdos inolvidables.
+      </p>
+      <div class="hero-scroll">
+        <span>Descubre más</span>
+        <svg width="20" height="32" viewBox="0 0 20 32" fill="none">
+          <rect x="1" y="1" width="18" height="30" rx="9" stroke="#C9A84C" stroke-width="2"/>
+          <circle cx="10" cy="10" r="3" fill="#C9A84C" class="scroll-dot"/>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 2: COUNTDOWN ===== -->
+  <section class="countdown" id="countdown">
+    <div class="container">
+      <span class="section-label">¿Cuánto falta?</span>
+      <h2 class="section-title">Cuenta regresiva</h2>
+      <div class="countdown-grid">
+        <div class="countdown-item">
+          <span class="countdown-number" id="days">00</span>
+          <span class="countdown-label">Días</span>
+        </div>
+        <div class="countdown-sep">:</div>
+        <div class="countdown-item">
+          <span class="countdown-number" id="hours">00</span>
+          <span class="countdown-label">Horas</span>
+        </div>
+        <div class="countdown-sep">:</div>
+        <div class="countdown-item">
+          <span class="countdown-number" id="minutes">00</span>
+          <span class="countdown-label">Minutos</span>
+        </div>
+        <div class="countdown-sep">:</div>
+        <div class="countdown-item">
+          <span class="countdown-number" id="seconds">00</span>
+          <span class="countdown-label">Segundos</span>
+        </div>
+      </div>
+      <p class="section-title">24 de Octubre de 2026</p>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 3: LOCATION ===== -->
+  <section class="location" id="location">
+    <div class="container">
+      <span class="section-label">El Lugar</span>
+      <h2 class="section-title">¿Dónde será?</h2>
+      <div class="location-card">
+        <div class="location-icon">
+          <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#C9A84C" stroke-width="1.5">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+        </div>
+        <p class="location-date">24 de Octubre de 2026 — 7:00 PM</p>
+        <p class="location-venue">Finca #11</p>
+        <p class="location-address">Parcelación El Limonar</p>
+        <p class="location-city">Copacabana, Antioquia</p>
+        <button class="btn btn-primary" onclick="openModal('map')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          Cómo llegar
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 4: PHOTO CAROUSEL ===== -->
+  <section class="carousel-section" id="carousel">
+    <div class="container">
+      <span class="section-label">Galería</span>
+      <h2 class="section-title">Mis Momentos</h2>
+    </div>
+    <div class="carousel" role="region" aria-label="Galería de fotos">
+      <div class="carousel-track" id="carousel-track">
+        <div class="carousel-slide"><img src="../img/fotoStudio/Ana1.jpg" alt="Foto 1" loading="lazy"></div>
+        <div class="carousel-slide"><img src="../img/fotoStudio/Ana2.jpg" alt="Foto 2" loading="lazy"></div>
+        <div class="carousel-slide"><img src="../img/fotoStudio/Ana3.jpg" alt="Foto 3" loading="lazy"></div>
+        <div class="carousel-slide"><img src="../img/fotoStudio/Ana4.jpg" alt="Foto 4" loading="lazy"></div>
+        <div class="carousel-slide"><img src="../img/fotoStudio/Ana5.jpg" alt="Foto 5" loading="lazy"></div>
+      </div>
+      <button class="carousel-btn carousel-prev" onclick="moveCarousel(-1)" aria-label="Anterior">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
+      </button>
+      <button class="carousel-btn carousel-next" onclick="moveCarousel(1)" aria-label="Siguiente">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg>
+      </button>
+      <div class="carousel-dots" id="carousel-dots"></div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 5: DRESS CODE ===== -->
+  <section class="dresscode" id="dresscode">
+    <div class="container">
+      <span class="section-label">Etiqueta</span>
+      <h2 class="section-title">Dress Code</h2>
+      <p class="dresscode-intro">Para esta noche tan especial, el código de vestimenta es</p>
+      <p class="dresscode-code">Traje de Gala</p>
+      <div class="dresscode-icons">
+        <div class="dresscode-card">
+          <svg viewBox="0 0 120 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="60" cy="60" rx="25" ry="30" fill="#B9C6E4" opacity="0.3"/>
+            <path d="M60 90 L45 140 L35 140 L30 170 L50 170 L55 145 L60 145 L65 170 L85 170 L80 140 L70 140 L60 90Z" fill="#B9C6E4" opacity="0.5"/>
+            <path d="M45 30 C40 40 35 55 40 65 L55 70 L50 55 L55 50 L60 55 L65 50 L70 55 L65 70 L80 65 C85 55 80 40 75 30" fill="#B9C6E4" opacity="0.4"/>
+          </svg>
+          <span>Dama</span>
+          <p>Vestido largo de gala</p>
+        </div>
+        <div class="dresscode-card">
+          <svg viewBox="0 0 120 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <ellipse cx="60" cy="50" rx="22" ry="28" fill="#55639B" opacity="0.3"/>
+            <path d="M40 72 L40 80 L35 85 L35 175 L55 175 L55 110 L60 105 L65 110 L65 175 L85 175 L85 85 L80 80 L80 72Z" fill="#55639B" opacity="0.5"/>
+            <path d="M38 75 L55 82 L60 78 L65 82 L82 75" stroke="#55639B" stroke-width="2" opacity="0.5"/>
+            <rect x="60" y="82" width="3" height="25" fill="#55639B" opacity="0.3"/>
+          </svg>
+          <span>Caballero</span>
+          <p>Traje formal con corbata o moño</p>
+        </div>
+      </div>
+      <div class="dresscode-buttons">
+        <button class="btn btn-secondary" onclick="openModal('dresscode')">Ver detalle</button>
+        <button class="btn btn-outline" onclick="openModal('tips')">Tips</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 6: GIFTS ===== -->
+  <section class="gifts" id="gifts">
+    <div class="container">
+      <span class="section-label">Detalle</span>
+      <h2 class="section-title">Regalos</h2>
+      <p class="gifts-text">Tu presencia es el mejor regalo, pero si deseas contribuir con mi fiesta...</p>
+      <button class="btn btn-primary" onclick="openModal('gifts')">Ver detalle</button>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 7: RSVP ===== -->
+  <section class="rsvp" id="rsvp">
+    <div class="container">
+      <span class="section-label">Confirma tu asistencia</span>
+      <h2 class="section-title">¡Te esperamos!</h2>
+      <p class="rsvp-text">Confirma antes del <strong>10 de Octubre</strong> para que todo esté perfecto.</p>
+      <button class="btn btn-primary" onclick="openModal('rsvp')">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M22 2L11 13"/><path d="M22 2L15 22L11 13L2 9L22 2Z"/>
+        </svg>
+        Confirmar asistencia
+      </button>
+    </div>
+  </section>
+
+  <!-- ===== SECTION 8: THANKS + PHOTOS ===== -->
+  <section class="thanks" id="thanks">
+    <div class="container">
+      <span class="section-label">Agradecimiento</span>
+      <h2 class="section-title">Gracias por ser parte de este gran sueño</h2>
+      <p class="thanks-message">
+        Cada uno de ustedes ha sido un regalo en mi vida. Hoy que cumplo 15 años,
+        los quiero a mi lado para celebrar y agradecer todo el amor que me han dado.
+        Esta noche será mágica porque estarán las personas que más quiero.
+        ¡Los espero con el corazón abierto!
+      </p>
+      <p class="thanks-sign">— Ana Sofia</p>
+    </div>
+    <div class="photo-strip" id="photo-strip">
+      <div class="photo-strip-item" style="top:1%;left:0%;width:36%;z-index:3;transform:rotate(-2.5deg)" data-rotate="-2.5" data-index="0">
+        <div class="photo-clip"><img src="../img/fotoStudio/Ana6.jpg" alt="" loading="lazy"></div>
+      </div>
+      <div class="photo-strip-item" style="top:-5%;left:30%;width:32%;z-index:5;transform:rotate(1.8deg)" data-rotate="1.8" data-index="1">
+        <div class="photo-clip"><img src="../img/fotoStudio/Ana7.jpg" alt="" loading="lazy"></div>
+      </div>
+      <div class="photo-strip-item" style="top:-1%;left:58%;width:28%;z-index:2;transform:rotate(-0.5deg)" data-rotate="-0.5" data-index="2">
+        <div class="photo-clip"><img src="../img/fotoStudio/Ana8.jpg" alt="" loading="lazy"></div>
+      </div>
+      <div class="photo-strip-item" style="top:26%;left:2%;width:34%;z-index:4;transform:rotate(3.2deg)" data-rotate="3.2" data-index="3">
+        <div class="photo-clip"><img src="../img/fotoStudio/Ana9.jpg" alt="" loading="lazy"></div>
+      </div>
+      <div class="photo-strip-item" style="top:23%;left:28%;width:38%;z-index:8;transform:rotate(-1.5deg)" data-rotate="-1.5" data-index="4">
+        <div class="photo-clip"><img src="../img/fotoStudio/Ana10.jpg" alt="" loading="lazy"></div>
+      </div>
+      <div class="photo-strip-item" style="top:20%;left:62%;width:30%;z-index:3;transform:rotate(2.7deg)" data-rotate="2.7" data-index="5">
+        <div class="photo-clip"><img src="../img/fotoStudio/Ana11.jpg" alt="" loading="lazy"></div>
+      </div>
+      <div class="photo-strip-item" style="top:50%;left:0%;width:30%;z-index:6;transform:rotate(-3.8deg)" data-rotate="-3.8" data-index="6">
+        <div class="photo-clip"><img src="../img/fotoStudio/Ana12.jpg" alt="" loading="lazy"></div>
+      </div>
+      <div class="photo-strip-item" style="top:55%;left:28%;width:34%;z-index:7;transform:rotate(0.8deg)" data-rotate="0.8" data-index="7">
+        <div class="photo-clip"><img src="../img/fotoStudio/Ana13.jpg" alt="" loading="lazy"></div>
+      </div>
+      <div class="photo-strip-item" style="top:43%;left:52%;width:36%;z-index:3;transform:rotate(-2deg)" data-rotate="-2" data-index="8">
+        <div class="photo-clip"><img src="../img/fotoStudio/Ana14.jpg" alt="" loading="lazy"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== FOOTER ===== -->
+  <footer class="footer">
+    <p>Hecho con todo el amor para ti</p>
+    <p class="footer-name">Ana Sofia Villa Chica</p>
+    <p class="footer-date">24 . 10 . 2026</p>
+  </footer>
+
+  <!-- SCRIPTS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="../js/invitacion.js"></script>
+</body>
+</html>

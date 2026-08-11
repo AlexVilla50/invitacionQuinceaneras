@@ -1,0 +1,15 @@
+{
+  "name": "package.json",
+  "version": "1.0.0",
+  "description": "proyecto invitación quiceañeras",
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+  "dev": "lite-server"
+},
+  "devDependencies": {
+    "lite-server": "^2.6.1"
+  }
+}

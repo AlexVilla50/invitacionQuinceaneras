@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mis XV - Ana Sofia</title>
+  <link rel="stylesheet" href="../css/index.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="shortcut icon" href="../img/icono15.png" type="image/x-icon">
+</head>
+<body>
+  <button id="btn-audio" class="audio-toggle" aria-label="Activar o desactivar la música" aria-pressed="false">
+    <svg class="audio-icon audio-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 5 6 9H2v6h4l5 4z"/>
+      <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+      <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+    </svg>
+    <svg class="audio-icon audio-icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M11 5 6 9H2v6h4l5 4z"/>
+      <line x1="22" y1="9" x2="16" y2="15"/>
+      <line x1="16" y1="9" x2="22" y2="15"/>
+    </svg>
+  </button>
+  <audio id="musica" src="../audio/cancion.mp3" loop preload="auto"></audio>
+
+  <a href="invitacion.html" class="link" id="btn-abrir">
+    <div class="contenedor" id="contenedor-sobre">
+      <p class="intro-line">Tienes una invitación</p>
+      <h1 class="titulo">
+        Mis XV
+        <span class="nombre">Ana Sofia Villa Chica</span>
+      </h1>
+      <div class="sobre-wrapper">
+        <img src="../img/sobreInvitacion.png" alt="sobre de invitación" class="sobre">
+        <div class="sobre-glow"></div>
+      </div>
+      <p class="abrir">Toca para abrir</p>
+    </div>
+  </a>
+  <script src="../js/index.js"></script>
+</body>
+</html>

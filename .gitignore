@@ -1,0 +1,7 @@
+node_modules/
+.claude/
+.agents/
+*.log
+.DS_Store
+Thumbs.db
+audio/cancion.mp3
