@@ -424,6 +424,7 @@ const modalContents = {
       <label for="rsvp-message">Dejame un mensaje con tus buenos deseos (opcional)</label>
       <textarea id="rsvp-message" placeholder="Tus mejores deseos para este gran día"></textarea>
 
+      <p class="rsvp-status" id="rsvp-status" role="status" aria-live="polite"></p>
       <button type="submit" class="btn btn-primary">Enviar confirmación</button>
     </form>
   `
@@ -475,28 +476,65 @@ document.addEventListener('keydown', (e) => {
 });
 
 /* ===== RSVP FORM ===== */
+const WA_NUMBER = '573007698235';
+
 function handleRSVP(e) {
   e.preventDefault();
-  const name = document.getElementById('rsvp-name').value;
-  const phone = document.getElementById('rsvp-phone').value;
+  const form = document.getElementById('rsvp-form');
+  const name = document.getElementById('rsvp-name').value.trim();
+  const phone = document.getElementById('rsvp-phone').value.trim();
   const guests = document.getElementById('rsvp-guests').value;
-  const message = document.getElementById('rsvp-message').value;
+  const message = document.getElementById('rsvp-message').value.trim();
+  const btn = form.querySelector('.btn');
+  const status = document.getElementById('rsvp-status');
 
-  const text = `¡Hola Ana Sofia!%0A%0AConfirmo mi asistencia:%0A👤 Nombre: ${encodeURIComponent(name)}%0A📱 Tel: ${encodeURIComponent(phone)}%0A👥 Invitados: ${guests}%0A📝 Mensaje: ${encodeURIComponent(message || 'Ninguno')}`;
+  function abrirWhatsApp() {
+    const text = `¡Hola Ana Sofia!%0A%0AConfirmo mi asistencia:%0A👤 Nombre: ${encodeURIComponent(name)}%0A📱 Tel: ${encodeURIComponent(phone)}%0A👥 Invitados: ${guests}%0A📝 Mensaje: ${encodeURIComponent(message || 'Ninguno')}`;
+    window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, '_blank');
+  }
 
-  window.open(`https://wa.me/573007698235?text=${text}`, '_blank');
+  function finalizar(mensaje, clase) {
+    btn.textContent = '✓ ¡Gracias por confirmar!';
+    btn.disabled = true;
+    btn.style.pointerEvents = 'none';
+    if (status) {
+      status.textContent = mensaje;
+      status.className = `rsvp-status ${clase}`;
+    }
+    setTimeout(() => {
+      closeModal();
+      btn.textContent = 'Enviar confirmación';
+      btn.disabled = false;
+      btn.style.pointerEvents = '';
+      form.reset();
+    }, clase === 'success' ? 2200 : 3500);
+  }
 
-  const btn = document.querySelector('#rsvp-form .btn');
-  btn.textContent = '✓ ¡Gracias por confirmar!';
+  btn.textContent = 'Enviando…';
   btn.disabled = true;
-  btn.style.pointerEvents = 'none';
-  setTimeout(() => {
-    closeModal();
-    btn.textContent = 'Enviar confirmación';
-    btn.disabled = false;
-    btn.style.pointerEvents = '';
-    document.getElementById('rsvp-form').reset();
-  }, 2000);
+  if (status) {
+    status.textContent = '';
+    status.className = 'rsvp-status';
+  }
+
+  fetch('/api/rsvp', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name, phone, guests, message })
+  })
+    .then(async (res) => {
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw data;
+      return data;
+    })
+    .then(() => {
+      abrirWhatsApp();
+      finalizar('Tu confirmación se guardó. ¡Gracias!', 'success');
+    })
+    .catch(() => {
+      abrirWhatsApp();
+      finalizar('Confirmado por WhatsApp. No pudimos guardarlo en la lista, pero recibimos tu confirmación.', 'warning');
+    });
 }
 
 /* ===== GSAP SCROLLTRIGGER ===== */

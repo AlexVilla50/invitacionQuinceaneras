@@ -500,6 +500,22 @@ button {
   margin-top: 0.5rem;
 }
 
+.rsvp-status {
+  min-height: 1.2em;
+  margin: 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
+  color: var(--color-text-muted);
+}
+
+.rsvp-status.success {
+  color: var(--color-gold);
+}
+
+.rsvp-status.warning {
+  color: var(--color-text-muted);
+}
+
 /* ===== FIXED BACKGROUND ===== */
 .fixed-bg {
   position: fixed;

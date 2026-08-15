@@ -7,9 +7,14 @@
   "type": "commonjs",
   "main": "index.js",
   "scripts": {
-  "dev": "lite-server"
-},
+    "dev": "lite-server",
+    "dev:vercel": "vercel dev"
+  },
   "devDependencies": {
-    "lite-server": "^2.6.1"
+    "lite-server": "^2.6.1",
+    "vercel": "^59.0.0"
+  },
+  "dependencies": {
+    "googleapis": "^174.0.1"
   }
 }
