@@ -31,13 +31,108 @@
   });
 })();
 
+/* ===== MODAL STARS — campo estrellado de los modales ===== */
+(function createModalStars() {
+  const sky = document.querySelector('.modal-stars');
+  if (!sky) return;
+
+  const layers = [
+    { count: 40, size: [1, 2], rgb: [255, 255, 255] },
+    { count: 20, size: [2, 3], rgb: [201, 212, 240] },
+    { count: 8, size: [2, 3], rgb: [232, 212, 138] }
+  ];
+
+  layers.forEach((layer) => {
+    for (let i = 0; i < layer.count; i++) {
+      const star = document.createElement('span');
+      star.className = 'star';
+      star.style.top = `${(Math.random() * 100).toFixed(2)}%`;
+      star.style.left = `${(Math.random() * 100).toFixed(2)}%`;
+      const size = layer.size[0] + Math.random() * (layer.size[1] - layer.size[0]);
+      star.style.width = `${size}px`;
+      star.style.height = `${size}px`;
+      const [r, g, b] = layer.rgb;
+      star.style.background = `rgba(${r}, ${g}, ${b}, 1)`;
+      if (size >= 2.2) {
+        star.style.boxShadow = `0 0 ${size * 3}px ${size}px rgba(${r}, ${g}, ${b}, 0.55)`;
+      }
+      star.style.animationDuration = `${(2.5 + Math.random() * 4).toFixed(2)}s`;
+      star.style.animationDelay = `${(Math.random() * 5).toFixed(2)}s`;
+      sky.appendChild(star);
+    }
+  });
+
+  for (let i = 0; i < 2; i++) {
+    const s = document.createElement('div');
+    s.className = 'shooting-star';
+    s.style.top = `${(10 + Math.random() * 35).toFixed(0)}%`;
+    s.style.left = `${(15 + Math.random() * 60).toFixed(0)}%`;
+    s.style.animationDuration = `${(7 + Math.random() * 5).toFixed(1)}s`;
+    s.style.animationDelay = `${(i * 6 + Math.random() * 4).toFixed(1)}s`;
+    sky.appendChild(s);
+  }
+})();
+
+/* ===== MODAL INNER STARS — estrellas dentro del modal ===== */
+(function createModalInnerStars() {
+  const sky = document.querySelector('.modal-sky');
+  if (!sky) return;
+
+  const layers = [
+    { count: 22, size: [1, 2], rgb: [255, 255, 255] },
+    { count: 10, size: [1.5, 2.5], rgb: [201, 212, 240] },
+    { count: 4, size: [1.5, 2.5], rgb: [232, 212, 138] }
+  ];
+
+  layers.forEach((layer) => {
+    for (let i = 0; i < layer.count; i++) {
+      const star = document.createElement('span');
+      star.className = 'star';
+      star.style.top = `${(Math.random() * 100).toFixed(2)}%`;
+      star.style.left = `${(Math.random() * 100).toFixed(2)}%`;
+      const size = layer.size[0] + Math.random() * (layer.size[1] - layer.size[0]);
+      star.style.width = `${size}px`;
+      star.style.height = `${size}px`;
+      const [r, g, b] = layer.rgb;
+      star.style.background = `rgba(${r}, ${g}, ${b}, 1)`;
+      if (size >= 2) {
+        star.style.boxShadow = `0 0 ${size * 3}px ${size}px rgba(${r}, ${g}, ${b}, 0.5)`;
+      }
+      star.style.animationDuration = `${(3 + Math.random() * 4).toFixed(2)}s`;
+      star.style.animationDelay = `${(Math.random() * 5).toFixed(2)}s`;
+      sky.appendChild(star);
+    }
+  });
+})();
+
 /* ===== MÚSICA DE FONDO ===== */
 (function initMusic() {
   const audio = document.getElementById('musica');
   const btn = document.getElementById('btn-audio');
   if (!audio) return;
 
+  let comenzada = false;
+  let usuarioPauso = false;
+
+  // Inicia (o reanuda) la reproducción UNA sola vez; nunca reinicia la canción.
+  // Si ya está sonando o el usuario la pausó a propósito, no hace nada.
   function reproducirBajoVolumen() {
+    if (usuarioPauso) return;
+    if (!audio.paused) return;
+
+    // Primera vez: retomar desde donde quedó en el sobre (continuidad, sin reiniciar)
+    if (!comenzada) {
+      comenzada = true;
+      const t = parseFloat(sessionStorage.getItem('xv-audio-time'));
+      if (Number.isFinite(t) && t > 0) {
+        try {
+          audio.currentTime = t;
+        } catch (e) {
+          /* ignorar */
+        }
+      }
+    }
+
     audio.volume = 0.2;
     const p = audio.play();
     if (p) p.catch(() => {});
@@ -48,8 +143,10 @@
   if (btn) {
     btn.addEventListener('click', () => {
       if (audio.paused) {
+        usuarioPauso = false;
         reproducirBajoVolumen();
       } else {
+        usuarioPauso = true;
         audio.pause();
         btn.classList.add('muted');
         btn.setAttribute('aria-pressed', 'false');
@@ -57,9 +154,41 @@
     });
   }
 
-  // Autoplay al entrar (viniendo desde el sobre o visita directa)
-  if (sessionStorage.getItem('xv-open') === '1') {
-    reproducirBajoVolumen();
+  // Autoplay al entrar (viniendo desde el sobre o visita directa).
+  // Espera a que la página cargue por completo y, además, a que el destello
+  // blanco de entrada termine de fundirse: la música suena solo cuando ya se
+  // ve toda la información.
+  const destello = document.getElementById('intro-flash');
+  const reducirMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const reproducirCuandoListo = () => {
+    window.removeEventListener('load', reproducirCuandoListo);
+    const desdeSobre = sessionStorage.getItem('xv-open') === '1';
+    sessionStorage.removeItem('xv-open');
+
+    // Sin destello (o con movimiento reducido): revelar ya; tocar solo si vino del sobre
+    if (!destello || reducirMovimiento) {
+      if (desdeSobre) reproducirBajoVolumen();
+      return;
+    }
+
+    // Revelar la página: el destello blanco se desvanece
+    destello.classList.add('on');
+
+    // La música arranca cuando el destello terminó de fundirse (información visible)
+    if (desdeSobre) {
+      destello.addEventListener('transitionend', () => {
+        reproducirBajoVolumen();
+      });
+      // Respaldo por si transitionend no dispara
+      setTimeout(reproducirBajoVolumen, 1400);
+    }
+  };
+
+  if (document.readyState === 'complete') {
+    reproducirCuandoListo();
+  } else {
+    window.addEventListener('load', reproducirCuandoListo);
   }
 
   // Fallback: si el navegador bloquea el autoplay, intentar en el primer gesto del usuario
@@ -225,26 +354,10 @@ const modalContents = {
   `,
 
   dresscode: `
-    <h3>Traje de Gala</h3>
-    <div class="dresscode-modal-grid">
-      <div class="dresscode-modal-card">
-        <svg viewBox="0 0 120 200" fill="none">
-          <ellipse cx="60" cy="60" rx="25" ry="30" fill="#B9C6E4" opacity="0.3"/>
-          <path d="M60 90 L45 140 L35 140 L30 170 L50 170 L55 145 L60 145 L65 170 L85 170 L80 140 L70 140 L60 90Z" fill="#B9C6E4" opacity="0.5"/>
-          <path d="M45 30 C40 40 35 55 40 65 L55 70 L50 55 L55 50 L60 55 L65 50 L70 55 L65 70 L80 65 C85 55 80 40 75 30" fill="#B9C6E4" opacity="0.4"/>
-        </svg>
-        <h4>Dama</h4>
-        <p>Vestido largo de gala, colores formales, tacones elegantes. Puedes usar accesorios brillantes y peinado sofisticado.</p>
-      </div>
-      <div class="dresscode-modal-card">
-        <svg viewBox="0 0 120 200" fill="none">
-          <ellipse cx="60" cy="50" rx="22" ry="28" fill="#55639B" opacity="0.3"/>
-          <path d="M40 72 L40 80 L35 85 L35 175 L55 175 L55 110 L60 105 L65 110 L65 175 L85 175 L85 85 L80 80 L80 72Z" fill="#55639B" opacity="0.5"/>
-          <path d="M38 75 L55 82 L60 78 L65 82 L82 75" stroke="#55639B" stroke-width="2" opacity="0.5"/>
-          <rect x="60" y="82" width="3" height="25" fill="#55639B" opacity="0.3"/>
-        </svg>
-        <h4>Caballero</h4>
-        <p>Traje formal oscuro, camisa blanca, corbata o moño. Zapatos de vestir, look pulcro y elegante.</p>
+    <h3>Traje formal</h3>
+    <div class="dresscode-modal-card dresscode-modal-single">
+      <div class="dresscode-figure dresscode-figure--contain">
+        <img src="../img/dressCode.png" alt="Traje formal" loading="lazy">
       </div>
     </div>
   `,
@@ -258,7 +371,7 @@ const modalContents = {
       </li>
       <li>
         <span class="tip-icon">2</span>
-        <span><strong>Rappel</strong> — Te sugerimos llegar en transporte privado o coordinar con otros invitados, la finca tiene parqueadero disponible.</span>
+        <span><strong>Cómo llegar</strong> — Te sugerimos llegar en transporte privado o coordinar con otros invitados, la finca tiene parqueadero disponible.</span>
       </li>
       <li>
         <span class="tip-icon">3</span>
@@ -277,8 +390,22 @@ const modalContents = {
 
   gifts: `
     <h3>Lluvia de Sobres</h3>
-    <div class="gifts-modal-icon">🧧</div>
-    <p>Tu presencia es el mejor regalo que puedo recibir. Sin embargo, si deseas contribuir con mi fiesta, la mesa de regalos estará disponible para una <strong>lluvia de sobres</strong>. Cualquier detalle será recibido con muchísimo cariño y gratitud.</p>
+    <div class="gifts-modal-icon">
+      <svg width="128" height="128" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <g opacity="0.3" transform="rotate(-16 60 60)">
+          <rect x="32" y="44" width="56" height="40" rx="3" fill="#B9C6E4"/>
+          <path d="M32 44 L60 66 L88 44 Z" fill="#55639B" opacity="0.6"/>
+        </g>
+        <rect x="22" y="38" width="76" height="58" rx="4" fill="#B9C6E4"/>
+        <path d="M22 38 L98 38 L60 72 Z" fill="#55639B" opacity="0.45"/>
+        <path d="M22 96 L60 72" stroke="#55639B" stroke-opacity="0.3" stroke-width="2"/>
+        <path d="M98 96 L60 72" stroke="#55639B" stroke-opacity="0.3" stroke-width="2"/>
+        <path d="M60 68 C58 65 55 66 55 69 C55 72 60 75.5 60 77 C60 75.5 65 72 65 69 C65 66 62 65 60 68 Z" fill="#C9A84C"/>
+        <path d="M108 30 l1.5 4 4 1.5 -4 1.5 -1.5 4 -1.5 -4 -4 -1.5 4 -1.5 Z" fill="#C9A84C"/>
+        <path d="M14 74 l1.2 3.2 3.2 1.2 -3.2 1.2 -1.2 3.2 -1.2 -3.2 -3.2 -1.2 3.2 -1.2 Z" fill="#C9A84C"/>
+        <path d="M16 26 l1 2.7 2.7 1 -2.7 1 -1 2.7 -1 -2.7 -2.7 -1 2.7 -1 Z" fill="#C9A84C" opacity="0.7"/>
+      </svg>
+    </div>
   `,
 
   rsvp: `
@@ -308,6 +435,26 @@ function openModal(type) {
   body.innerHTML = modalContents[type] || '<p>Contenido no disponible</p>';
   overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
+  spawnShootingStars();
+}
+
+/* Estrellas fugaces de un solo disparo al abrir cada modal */
+function spawnShootingStars() {
+  const sky = document.querySelector('.modal-stars');
+  if (!sky) return;
+  const count = 2 + Math.floor(Math.random() * 2);
+  for (let i = 0; i < count; i++) {
+    const s = document.createElement('div');
+    s.className = 'shooting-star';
+    s.style.top = `${(8 + Math.random() * 40).toFixed(0)}%`;
+    s.style.left = `${(10 + Math.random() * 65).toFixed(0)}%`;
+    s.style.animationDuration = `${(1.1 + Math.random() * 0.7).toFixed(2)}s`;
+    s.style.animationDelay = `${(i * 0.25 + Math.random() * 0.3).toFixed(2)}s`;
+    s.style.animationIterationCount = '1';
+    s.addEventListener('animationend', () => s.remove());
+    setTimeout(() => s.remove(), 5000);
+    sky.appendChild(s);
+  }
 }
 
 function closeModal() {

@@ -10,6 +10,26 @@
   <link rel="shortcut icon" href="../img/icono15.png" type="image/x-icon">
 </head>
 <body>
+
+  <!-- ===== CIELO NOCTURNO (fondo) ===== -->
+  <div class="night-sky" aria-hidden="true">
+    <div class="nebula nebula-1"></div>
+    <div class="nebula nebula-2"></div>
+    <div class="moon"></div>
+    <div class="star-field" id="stars-1"></div>
+    <div class="star-field" id="stars-2"></div>
+    <div class="star-field" id="stars-3"></div>
+    <div class="shooting-star shoot-a"></div>
+    <div class="shooting-star shoot-b"></div>
+    <div class="vignette"></div>
+  </div>
+
+  <!-- ===== CAPAS DE TRANSICIÓN DE APERTURA ===== -->
+  <div class="flash" id="flash" aria-hidden="true"></div>
+  <div class="particle-burst" id="particle-burst" aria-hidden="true"></div>
+  <div class="fade-out" id="fade-out" aria-hidden="true"></div>
+
+  <!-- ===== TOGGLE AUDIO ===== -->
   <button id="btn-audio" class="audio-toggle" aria-label="Activar o desactivar la música" aria-pressed="false">
     <svg class="audio-icon audio-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
       <path d="M11 5 6 9H2v6h4l5 4z"/>
@@ -32,8 +52,14 @@
         <span class="nombre">Ana Sofia Villa Chica</span>
       </h1>
       <div class="sobre-wrapper">
-        <img src="../img/sobreInvitacion.png" alt="sobre de invitación" class="sobre">
         <div class="sobre-glow"></div>
+        <div class="orbit-sparkles">
+          <span class="orbit-dot dot-1"></span>
+          <span class="orbit-dot dot-2"></span>
+          <span class="orbit-dot dot-3"></span>
+          <span class="orbit-dot dot-4"></span>
+        </div>
+        <img src="../img/sobreInvitacion.png" alt="sobre de invitación" class="sobre">
       </div>
       <p class="abrir">Toca para abrir</p>
     </div>
