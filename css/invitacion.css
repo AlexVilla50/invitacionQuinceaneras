@@ -521,7 +521,7 @@ button {
   position: fixed;
   inset: -10%;
   z-index: 0;
-  background: url('../img/fotoStudio/Ana1.jpg') center/cover no-repeat;
+  background: url('../img/fotoStudio/Ana1.jpg') center 25% / cover no-repeat;
   will-change: transform;
 }
 
@@ -531,8 +531,8 @@ button {
   z-index: 1;
   background:
     linear-gradient(to bottom,
-      rgba(10, 17, 40, 0.35) 0%,
-      rgba(10, 17, 40, 0.60) 40%,
+      rgba(10, 17, 40, 0.45) 0%,
+      rgba(10, 17, 40, 0.65) 40%,
       rgba(10, 17, 40, 0.82) 70%,
       var(--color-bg) 100%);
   pointer-events: none;
@@ -1222,6 +1222,24 @@ button {
 @media (min-width: 1024px) {
   :root {
     --section-pad: 6rem 2rem;
+  }
+
+  /* En pantallas anchas la foto vertical se recorta en los costados:
+     se centra el encuadre en el rostro y se refuerza el degradado de los
+     bordes para que el texto siempre sea legible. */
+  .fixed-bg { background-position: center 20%; }
+  .fixed-bg-overlay {
+    background:
+      linear-gradient(to bottom,
+        rgba(10, 17, 40, 0.55) 0%,
+        rgba(10, 17, 40, 0.70) 40%,
+        rgba(10, 17, 40, 0.85) 70%,
+        var(--color-bg) 100%),
+      linear-gradient(to right,
+        rgba(10, 17, 40, 0.40) 0%,
+        transparent 20%,
+        transparent 80%,
+        rgba(10, 17, 40, 0.40) 100%);
   }
 
   .section-title {
