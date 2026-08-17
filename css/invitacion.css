@@ -852,14 +852,20 @@ button {
   margin: 0 auto;
   overflow: hidden;
   border-radius: var(--radius);
-  aspect-ratio: 3 / 4;
   background: var(--color-bg);
 }
 
+.carousel::before {
+  content: "";
+  display: block;
+  padding-top: 133.33%; /* 3/4 (mobile) */
+}
+
 .carousel-track {
+  position: absolute;
+  inset: 0;
   display: flex;
   transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  height: 100%;
 }
 
 .carousel-slide {
@@ -1199,7 +1205,7 @@ button {
   .location-card { padding: 3rem; }
 
   /* Carousel */
-  .carousel { aspect-ratio: 16 / 9; }
+  .carousel::before { padding-top: 56.25%; } /* 16/9 (desktop) */
   .carousel-btn { opacity: 1; }
 
   /* Dress code */
