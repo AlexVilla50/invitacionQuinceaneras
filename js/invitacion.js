@@ -114,6 +114,20 @@
   let comenzada = false;
   let usuarioPauso = false;
 
+  audio.preload = 'auto';
+  // Empezar a cargar cuanto antes para que el seek funcione al primer toque
+  if (audio.readyState === 0) {
+    try { audio.load(); } catch (e) { /* ignorar */ }
+  }
+
+  function reproducir() {
+    audio.volume = 0.2;
+    const p = audio.play();
+    if (p) p.catch(() => {});
+    btn?.classList.remove('muted');
+    btn?.setAttribute('aria-pressed', 'true');
+  }
+
   // Inicia (o reanuda) la reproducción UNA sola vez; nunca reinicia la canción.
   // Si ya está sonando o el usuario la pausó a propósito, no hace nada.
   function reproducirBajoVolumen() {
@@ -125,19 +139,25 @@
       comenzada = true;
       const t = parseFloat(sessionStorage.getItem('xv-audio-time'));
       if (Number.isFinite(t) && t > 0) {
-        try {
-          audio.currentTime = t;
-        } catch (e) {
-          /* ignorar */
+        // iOS ignora currentTime si el audio aún no cargó: esperar al metadato
+        // (con respaldo por si loadedmetadata nunca dispara)
+        let retomado = false;
+        const retomar = () => {
+          if (retomado) return;
+          retomado = true;
+          try { audio.currentTime = t; } catch (e) { /* ignorar */ }
+          reproducir();
+        };
+        if (audio.readyState >= 1) {
+          retomar();
+        } else {
+          audio.addEventListener('loadedmetadata', retomar, { once: true });
+          setTimeout(retomar, 1500);
         }
+        return;
       }
     }
-
-    audio.volume = 0.2;
-    const p = audio.play();
-    if (p) p.catch(() => {});
-    btn?.classList.remove('muted');
-    btn?.setAttribute('aria-pressed', 'true');
+    reproducir();
   }
 
   if (btn) {
@@ -191,18 +211,21 @@
     window.addEventListener('load', reproducirCuandoListo);
   }
 
-  // Fallback: si el navegador bloquea el autoplay, intentar en el primer gesto del usuario
-  let reintentado = false;
-  const reintentar = () => {
-    if (!reintentado && audio.paused) {
-      reintentado = true;
-      reproducirBajoVolumen();
+  // iOS/móvil: el autoplay se bloquea hasta el primer gesto real del usuario.
+  // Se escucha touchstart/pointerdown/click (NO scroll: no cuenta como gesto en
+  // iOS Safari) y se remueven los listeners solo cuando ya está sonando.
+  const gestos = ['pointerdown', 'touchstart', 'click'];
+  const intentarEnGesto = () => {
+    if (!audio.paused) {
+      gestos.forEach((g) => window.removeEventListener(g, intentarEnGesto));
+      return;
     }
-    window.removeEventListener('pointerdown', reintentar);
-    window.removeEventListener('scroll', reintentar);
+    reproducirBajoVolumen();
+    if (!audio.paused) {
+      gestos.forEach((g) => window.removeEventListener(g, intentarEnGesto));
+    }
   };
-  window.addEventListener('pointerdown', reintentar);
-  window.addEventListener('scroll', reintentar, { passive: true });
+  gestos.forEach((g) => window.addEventListener(g, intentarEnGesto));
 })();
 
 /* ===== COUNTDOWN ===== */
