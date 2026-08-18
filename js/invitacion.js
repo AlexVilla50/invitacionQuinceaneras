@@ -358,18 +358,18 @@ const modalContents = {
     <p>Finca #11 — Parcelación El Limonar, Copacabana, Antioquia</p>
     <div class="map-container">
       <iframe
-        src="https://maps.google.com/maps?q=Finca+%2311+Parcelaci%C3%B3n+El+Limonar+Copacabana+Antioquia&output=embed"
+        src="https://maps.google.com/maps?q=6.38325,-75.47942&z=15&output=embed"
         allowfullscreen
         loading="lazy"
         referrerpolicy="no-referrer-when-downgrade">
       </iframe>
     </div>
     <div class="map-buttons">
-      <a class="map-btn gmaps" href="https://maps.app.goo.gl/ZvFWzxfnd5qdKt199" target="_blank" rel="noopener">
+      <a class="map-btn gmaps" href="https://www.google.com/maps/search/?api=1&query=6.38325,-75.47942" target="_blank" rel="noopener">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/></svg>
         Google Maps
       </a>
-      <a class="map-btn waze" href="https://waze.com/ul?q=Finca%20%2311%20Parcelaci%C3%B3n%20El%20Limonar%20Copacabana%20Antioquia" target="_blank" rel="noopener">
+      <a class="map-btn waze" href="https://waze.com/ul?ll=6.38325,-75.47942&navigate=yes" target="_blank" rel="noopener">
         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z"/></svg>
         Waze
       </a>
@@ -378,9 +378,11 @@ const modalContents = {
 
   dresscode: `
     <h3>Traje formal</h3>
+    <p class="dresscode-reserved-text">Se reservan los colores azul oscuro y azul rey para esta celebración. Te agradecemos elegir otra tonalidad para tu atuendo.</p>
     <div class="dresscode-modal-card dresscode-modal-single">
       <div class="dresscode-figure dresscode-figure--contain">
         <img src="../img/dressCode.png" alt="Traje formal" loading="lazy">
+        <p class="dresscode-colors-text">Colores recomendados:</p>
       </div>
     </div>
   `,
