@@ -606,14 +606,23 @@ button {
 /* ===== FIXED BACKGROUND ===== */
 .fixed-bg {
   position: fixed;
-  inset: -10%;
+  top: -10%;
+  left: -10%;
+  width: 120%;
+  height: 120%;
   z-index: 0;
   background: url('../img/fotoStudio/Ana1.jpg') center 25% / cover no-repeat;
+  /* Capa propia: en iOS evita que el destello (capas animadas) repinte el fondo */
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 .fixed-bg-overlay {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 1;
   background:
     linear-gradient(to bottom,
@@ -622,12 +631,17 @@ button {
       rgba(10, 17, 40, 0.82) 70%,
       var(--color-bg) 100%);
   pointer-events: none;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
 }
 
 /* ===== STARRY SKY (parallax: estrellas y luna) ===== */
 .parallax-sky {
   position: fixed;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   z-index: 1;
   overflow: hidden;
   pointer-events: none;
@@ -1169,14 +1183,23 @@ button {
 }
 
 /* Destello dorado: barre las fotos para invitar a deslizar el dedo */
+.photo-strip-shimmer-wrap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 15;
+  overflow: hidden;
+  pointer-events: none;
+}
+
 .photo-strip-shimmer {
   position: absolute;
   top: 0;
   left: 0;
   width: 55%;
   height: 100%;
-  z-index: 15;
-  pointer-events: none;
   background: linear-gradient(
     105deg,
     transparent 0%,
@@ -1187,11 +1210,10 @@ button {
     rgba(201, 168, 76, 0) 78%,
     transparent 100%
   );
-  will-change: transform;
   animation: shimmer-sweep 3.4s ease-in-out infinite;
 }
 
-.photo-strip-shimmer.is-hidden {
+.photo-strip-shimmer-wrap.is-hidden {
   opacity: 0;
 }
 
