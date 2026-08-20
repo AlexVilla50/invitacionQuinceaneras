@@ -222,8 +222,11 @@
   // iOS/móvil: el autoplay se bloquea hasta el primer gesto real del usuario.
   // Se escucha touchstart/pointerdown/click (NO scroll: no cuenta como gesto en
   // iOS Safari) y se remueven los listeners solo cuando ya está sonando.
+  // El botón de audio se excluye: tiene su propio toggle, si no el primer tap
+  // arrancaría la música (gesto global) y el click del botón la pausaría al instante.
   const gestos = ['pointerdown', 'touchstart', 'click'];
-  const intentarEnGesto = () => {
+  const intentarEnGesto = (e) => {
+    if (e.target && e.target.closest && e.target.closest('#btn-audio')) return;
     if (!audio.paused) {
       gestos.forEach((g) => window.removeEventListener(g, intentarEnGesto));
       return;
@@ -390,7 +393,7 @@ const modalContents = {
     <div class="dresscode-modal-card dresscode-modal-single">
       <p class="dresscode-colors-text">Colores recomendados:</p>
       <div class="dresscode-figure dresscode-figure--contain">
-        <img src="../img/dressCode.png" alt="Traje formal" loading="lazy">
+        <img src="img/dressCode.png" alt="Traje formal" loading="lazy">
       </div>
     </div>
   `,

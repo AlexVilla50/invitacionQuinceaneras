@@ -4,8 +4,9 @@
     "routes": {
       "/css": "./css",
       "/js": "./js",
-      "/img": "./img"
+      "/img": "./img",
+      "/audio": "./audio"
     }
   },
-  "files": ["./**/*.{html,htm,css,js}"]
+  "files": ["./html/**/*.html", "./css/**/*.css", "./js/**/*.js"]
 }
