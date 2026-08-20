@@ -578,21 +578,7 @@ function handleRSVP(e) {
 (function initGSAP() {
   if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') return;
 
-  // 1. Fixed bg subtle breathing effect (scale in/out on scroll)
-  gsap.fromTo('.fixed-bg', {
-    scale: 1
-  }, {
-    scale: 1.08,
-    ease: 'none',
-    scrollTrigger: {
-      trigger: 'body',
-      start: 'top top',
-      end: 'bottom bottom',
-      scrub: 2
-    }
-  });
-
-  // 1b. Parallax del cielo estrellado (estrellas a distinta velocidad + luna)
+  // 1. Parallax del cielo estrellado (estrellas a distinta velocidad + luna)
   const skyLayers = [
     { sel: '.layer-1', depth: 8 },
     { sel: '.layer-2', depth: 16 },

@@ -609,7 +609,6 @@ button {
   inset: -10%;
   z-index: 0;
   background: url('../img/fotoStudio/Ana1.jpg') center 25% / cover no-repeat;
-  will-change: transform;
 }
 
 .fixed-bg-overlay {
@@ -1178,7 +1177,6 @@ button {
   height: 100%;
   z-index: 15;
   pointer-events: none;
-  mix-blend-mode: screen;
   background: linear-gradient(
     105deg,
     transparent 0%,
@@ -1189,8 +1187,7 @@ button {
     rgba(201, 168, 76, 0) 78%,
     transparent 100%
   );
-  filter: blur(8px);
-  will-change: transform, opacity;
+  will-change: transform;
   animation: shimmer-sweep 3.4s ease-in-out infinite;
 }
 
