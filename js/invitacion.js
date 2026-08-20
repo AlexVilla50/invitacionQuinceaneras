@@ -114,10 +114,18 @@
   let comenzada = false;
   let usuarioPauso = false;
 
-  audio.preload = 'auto';
-  // Empezar a cargar cuanto antes para que el seek funcione al primer toque
-  if (audio.readyState === 0) {
-    try { audio.load(); } catch (e) { /* ignorar */ }
+  // Cargar el mp3 una vez la página terminó de renderizar: así el audio no
+  // compite con las imágenes por el ancho de banda en la carga inicial.
+  const cargarAudio = () => {
+    if (audio.readyState === 0) {
+      audio.preload = 'auto';
+      try { audio.load(); } catch (e) { /* ignorar */ }
+    }
+  };
+  if (document.readyState === 'complete') {
+    cargarAudio();
+  } else {
+    window.addEventListener('load', cargarAudio, { once: true });
   }
 
   function reproducir() {
@@ -378,11 +386,11 @@ const modalContents = {
 
   dresscode: `
     <h3>Traje formal</h3>
-    <p class="dresscode-reserved-text">Se reservan los colores azul oscuro y azul rey para esta celebración. Te agradecemos elegir otra tonalidad para tu atuendo.</p>
+    <p class="dresscode-reserved-text">Se reservan colores fuertes, azul oscurito y azul rey para esta celebración. Te agradecemos elegir otra tonalidad para tu atuendo.</p>
     <div class="dresscode-modal-card dresscode-modal-single">
+      <p class="dresscode-colors-text">Colores recomendados:</p>
       <div class="dresscode-figure dresscode-figure--contain">
         <img src="../img/dressCode.png" alt="Traje formal" loading="lazy">
-        <p class="dresscode-colors-text">Colores recomendados:</p>
       </div>
     </div>
   `,
@@ -458,7 +466,9 @@ const modalContents = {
 function openModal(type) {
   const overlay = document.getElementById('modal-overlay');
   const body = document.getElementById('modal-body');
+  const modal = document.getElementById('modal-content');
   body.innerHTML = modalContents[type] || '<p>Contenido no disponible</p>';
+  modal.classList.toggle('modal--dresscode', type === 'dresscode');
   overlay.classList.add('active');
   document.body.style.overflow = 'hidden';
   spawnShootingStars();
@@ -485,6 +495,8 @@ function spawnShootingStars() {
 
 function closeModal() {
   const overlay = document.getElementById('modal-overlay');
+  const modal = document.getElementById('modal-content');
+  modal.classList.remove('modal--dresscode');
   overlay.classList.remove('active');
   document.body.style.overflow = '';
 }
@@ -709,7 +721,7 @@ function handleRSVP(e) {
       if (sibling !== item) sibling.classList.add('has-active');
     });
 
-    if (xRatio !== undefined && yRatio !== undefined && !isTouchDevice) {
+    if (xRatio !== undefined && yRatio !== undefined) {
       const tiltX = -((yRatio - 0.5) * 2) * 12;
       const tiltY = ((xRatio - 0.5) * 2) * 12;
       const dist = Math.sqrt(
@@ -818,47 +830,61 @@ function handleRSVP(e) {
   });
 
   // --- TOUCH (mobile / tablet) ---
+  // Mismo efecto que el mouse: al deslizar el dedo sobre las fotos, cada foto
+  // sobre la que pasa se activa (tilt + parallax) y las demás se atenúan.
   if (isTouchDevice) {
-    items.forEach(item => {
-      let touchActive = false;
+    const strip = document.getElementById('photo-strip');
 
-      item.addEventListener('touchstart', (e) => {
-        if (touchActive) {
-          deactivate(item, false);
-          touchActive = false;
-          return;
+    const fotoEnPunto = (clientX, clientY) => {
+      for (const item of items) {
+        const r = item.getBoundingClientRect();
+        if (clientX >= r.left && clientX <= r.right && clientY >= r.top && clientY <= r.bottom) {
+          return item;
         }
-        e.preventDefault();
-        const touch = e.changedTouches[0];
-        const rect = item.getBoundingClientRect();
-        const xRatio = (touch.clientX - rect.left) / rect.width;
-        const yRatio = (touch.clientY - rect.top) / rect.height;
-        activate(item, xRatio, yRatio);
-        touchActive = true;
-      }, { passive: false });
+      }
+      return null;
+    };
 
-      item.addEventListener('touchmove', (e) => {
-        if (!touchActive) return;
-        e.preventDefault();
-        const touch = e.changedTouches[0];
-        const rect = item.getBoundingClientRect();
-        const xRatio = Math.max(0, Math.min(1, (touch.clientX - rect.left) / rect.width));
-        const yRatio = Math.max(0, Math.min(1, (touch.clientY - rect.top) / rect.height));
-        activate(item, xRatio, yRatio);
-      }, { passive: false });
+    const ratioEnItem = (item, clientX, clientY) => {
+      const r = item.getBoundingClientRect();
+      return {
+        x: Math.max(0, Math.min(1, (clientX - r.left) / r.width)),
+        y: Math.max(0, Math.min(1, (clientY - r.top) / r.height))
+      };
+    };
 
-      item.addEventListener('touchend', (e) => {
-        if (!touchActive) return;
-        e.preventDefault();
-        touchActive = false;
-        deactivate(item, false);
-      });
+    let touchActivo = false;
 
-      item.addEventListener('touchcancel', () => {
-        if (!touchActive) return;
-        touchActive = false;
-        deactivate(item, false);
-      });
+    strip.addEventListener('touchstart', (e) => {
+      const touch = e.changedTouches[0];
+      const item = fotoEnPunto(touch.clientX, touch.clientY);
+      if (!item) return;
+      const { x, y } = ratioEnItem(item, touch.clientX, touch.clientY);
+      activate(item, x, y);
+      touchActivo = true;
+    }, { passive: true });
+
+    strip.addEventListener('touchmove', (e) => {
+      if (!touchActivo) return;
+      e.preventDefault();
+      const touch = e.changedTouches[0];
+      const item = fotoEnPunto(touch.clientX, touch.clientY);
+      if (item) {
+        const { x, y } = ratioEnItem(item, touch.clientX, touch.clientY);
+        activate(item, x, y);
+      }
+    }, { passive: false });
+
+    strip.addEventListener('touchend', (e) => {
+      if (!touchActivo) return;
+      touchActivo = false;
+      deactivate(activeItem, false);
+    });
+
+    strip.addEventListener('touchcancel', () => {
+      if (!touchActivo) return;
+      touchActivo = false;
+      deactivate(activeItem, false);
     });
   }
 

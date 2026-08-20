@@ -383,7 +383,7 @@ button {
 }
 
 .dresscode-modal-single .dresscode-figure {
-  width: min(360px, 100%);
+  width: 100%;
   aspect-ratio: 432 / 578;
   margin: 0 auto;
   position: relative;
@@ -391,6 +391,8 @@ button {
 }
 
 .dresscode-modal-single .dresscode-figure img {
+  width: 100%;
+  height: 100%;
   filter: drop-shadow(0 0 10px rgba(185, 198, 228, 0.45)) drop-shadow(0 0 24px rgba(185, 198, 228, 0.3));
 }
 
@@ -406,17 +408,13 @@ button {
 }
 
 .dresscode-colors-text {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  margin-top: 10px;
-  width: max-content;
-  max-width: 100%;
   font-family: var(--font-display);
-  font-size: 2rem;
+  font-size: 1.5rem;
   color: var(--color-gold);
+  text-align: center;
+  margin: 0.6rem auto 0.75rem;
   text-shadow: 0 1px 4px rgba(10, 17, 40, 0.8);
+  flex: 0 0 auto;
 }
 
 .dresscode-reserved-text {
@@ -429,6 +427,68 @@ button {
 .dresscode-reserved-text strong {
   color: var(--color-gold);
   font-weight: 600;
+}
+
+/* Dress code modal expandido (contenedor más grande sin recorte de imagen) */
+.modal--dresscode {
+  height: 94vh;
+  height: 94dvh;
+  max-height: none;
+  max-width: 600px;
+  width: 96%;
+}
+
+.modal--dresscode .modal-body {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  padding: 1.25rem 1rem 1rem;
+}
+
+.modal--dresscode .modal-body h3 {
+  margin-bottom: 0.5rem;
+}
+
+.modal--dresscode .dresscode-reserved-text {
+  flex: 0 0 auto;
+  margin: 0.25rem 0 0.25rem;
+}
+
+.modal--dresscode .dresscode-modal-single {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  margin: 0.5rem 0 0;
+  padding: 0;
+  max-width: none;
+}
+
+.modal--dresscode .dresscode-colors-text {
+  flex: 0 0 auto;
+  margin: 0.25rem auto 0.4rem;
+  font-size: 1.4rem;
+}
+
+.modal--dresscode .dresscode-modal-single .dresscode-figure {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  height: 100%;
+  aspect-ratio: auto;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal--dresscode .dresscode-figure img {
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  object-position: center;
 }
 
 /* Tips modal */
@@ -890,21 +950,30 @@ button {
 
 .carousel-track {
   position: absolute;
-  inset: 0;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
   display: flex;
   transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
 .carousel-slide {
-  min-width: 100%;
+  position: relative;
+  flex: 0 0 100%;
   height: 100%;
-  flex-shrink: 0;
 }
 
 .carousel-slide img {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
+  max-width: 100%;
+  max-height: 100%;
   object-fit: cover;
+  object-position: center;
 }
 
 .carousel-btn {
@@ -1138,6 +1207,7 @@ button {
   backface-visibility: hidden;
 }
 
+.photo-strip-item.active .photo-clip,
 .photo-strip-item:hover .photo-clip {
   box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.6),
@@ -1168,6 +1238,7 @@ button {
   mix-blend-mode: overlay;
 }
 
+.photo-strip-item.active::after,
 .photo-strip-item:hover::after {
   opacity: 1;
 }
@@ -1198,6 +1269,17 @@ button {
   font-family: var(--font-display);
   font-size: 2.0rem;
   color: var(--color-silver);
+}
+
+/* ===== RESPONSIVE: MÓVIL PEQUEÑO (≤480px) ===== */
+@media (max-width: 480px) {
+  .modal-overlay { padding: 0; }
+  .modal-body { padding: 1rem; }
+  .dresscode-modal-single { max-width: none; padding: 0; }
+  .dresscode-modal-single .dresscode-figure {
+    width: calc(100% + 2rem);
+    margin: 0 -1rem;
+  }
 }
 
 /* ===== RESPONSIVE: TABLET (768px+) ===== */
@@ -1242,6 +1324,7 @@ button {
   /* Photo collage */
   .photo-strip { max-width: 800px; padding-bottom: 90%; }
   .photo-clip { border-radius: 8px; }
+  .photo-strip-item.active .photo-clip,
   .photo-strip-item:hover .photo-clip { box-shadow: 0 24px 72px rgba(0, 0, 0, 0.6), 0 0 0 2px rgba(201, 168, 76, 0.35), 0 0 50px rgba(201, 168, 76, 0.15); }
 }
 
@@ -1286,6 +1369,7 @@ button {
 
   .photo-strip { max-width: 960px; padding-bottom: 80%; }
   .photo-clip { border-radius: 10px; }
+  .photo-strip-item.active .photo-clip,
   .photo-strip-item:hover .photo-clip { box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 2.5px rgba(201, 168, 76, 0.4), 0 0 60px rgba(201, 168, 76, 0.18); }
 }
 

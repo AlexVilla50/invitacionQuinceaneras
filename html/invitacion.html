@@ -6,6 +6,8 @@
   <title>Ana Sofia - Mis XV años</title>
   <link rel="stylesheet" href="../css/invitacion.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://cdnjs.cloudflare.com">
   <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
   <link rel="shortcut icon" href="../img/icono15.png" type="image/x-icon">
 </head>
@@ -27,7 +29,7 @@
       <line x1="16" y1="9" x2="22" y2="15"/>
     </svg>
   </button>
-  <audio id="musica" src="../audio/introViolin.mp3" loop preload="auto"></audio>
+  <audio id="musica" src="../audio/introViolin.mp3" loop preload="none"></audio>
 
   <!-- ===== MODAL OVERLAY ===== -->
   <div class="modal-overlay" id="modal-overlay" onclick="closeModalOutside(event)">
@@ -142,11 +144,11 @@
     </div>
     <div class="carousel" role="region" aria-label="Galería de fotos">
       <div class="carousel-track" id="carousel-track">
-        <div class="carousel-slide"><img src="../img/fotoStudio/Ana1.jpg" alt="Foto 1" loading="lazy"></div>
-        <div class="carousel-slide"><img src="../img/fotoStudio/Ana2.jpg" alt="Foto 2" loading="lazy"></div>
-        <div class="carousel-slide"><img src="../img/fotoStudio/Ana3.jpg" alt="Foto 3" loading="lazy"></div>
-        <div class="carousel-slide"><img src="../img/fotoStudio/Ana4.jpg" alt="Foto 4" loading="lazy"></div>
-        <div class="carousel-slide"><img src="../img/fotoStudio/Ana5.jpg" alt="Foto 5" loading="lazy"></div>
+        <div class="carousel-slide"><img src="../img/fotoStudio/Ana1.jpg" alt="Foto 1" loading="lazy" decoding="async"></div>
+        <div class="carousel-slide"><img src="../img/fotoStudio/Ana2.jpg" alt="Foto 2" loading="lazy" decoding="async"></div>
+        <div class="carousel-slide"><img src="../img/fotoStudio/Ana3.jpg" alt="Foto 3" loading="lazy" decoding="async"></div>
+        <div class="carousel-slide"><img src="../img/fotoStudio/Ana4.jpg" alt="Foto 4" loading="lazy" decoding="async"></div>
+        <div class="carousel-slide"><img src="../img/fotoStudio/Ana5.jpg" alt="Foto 5" loading="lazy" decoding="async"></div>
       </div>
       <button class="carousel-btn carousel-prev" onclick="moveCarousel(-1)" aria-label="Anterior">
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg>
