@@ -705,6 +705,25 @@ function handleRSVP(e) {
   let activeItem = null;
   const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
+  // Destello dorado de deslizar: solo en táctil; se desvanece al primer toque
+  // o tras unos segundos para no quedarse en pantalla.
+  const shimmer = document.getElementById('photo-strip-shimmer');
+  if (shimmer && !isTouchDevice) {
+    shimmer.remove();
+  } else if (shimmer) {
+    let ocultado = false;
+    const ocultarShimmer = () => {
+      if (ocultado) return;
+      ocultado = true;
+      shimmer.classList.add('is-hidden');
+    };
+    const auto = setTimeout(ocultarShimmer, 9000);
+    strip.addEventListener('touchstart', () => {
+      clearTimeout(auto);
+      ocultarShimmer();
+    }, { once: true, passive: true });
+  }
+
   function activate(item, xRatio, yRatio) {
     if (activeItem && activeItem !== item) {
       deactivate(activeItem, true);

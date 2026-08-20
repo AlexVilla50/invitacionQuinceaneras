@@ -1169,6 +1169,49 @@ button {
   margin-bottom: 1.5rem;
 }
 
+/* Destello dorado: barre las fotos para invitar a deslizar el dedo */
+.photo-strip-shimmer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 55%;
+  height: 100%;
+  z-index: 15;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(201, 168, 76, 0) 22%,
+    rgba(201, 168, 76, 0.35) 40%,
+    rgba(255, 236, 170, 0.85) 50%,
+    rgba(201, 168, 76, 0.35) 60%,
+    rgba(201, 168, 76, 0) 78%,
+    transparent 100%
+  );
+  filter: blur(8px);
+  will-change: transform, opacity;
+  animation: shimmer-sweep 3.4s ease-in-out infinite;
+}
+
+.photo-strip-shimmer.is-hidden {
+  opacity: 0;
+}
+
+@keyframes shimmer-sweep {
+  0% {
+    transform: translateX(-130%) skewX(-12deg);
+    opacity: 0;
+  }
+  25% { opacity: 0.85; }
+  50% { opacity: 1; }
+  75% { opacity: 0.85; }
+  100% {
+    transform: translateX(240%) skewX(-12deg);
+    opacity: 0;
+  }
+}
+
 .photo-strip {
   position: relative;
   width: 100%;
