@@ -910,3 +910,67 @@ function handleRSVP(e) {
   // Fix initial z-index persistence after GSAP
   gsap.config({ nullTargets: true });
 })();
+
+/* ===== SNAP DE SECCIONES ===== */
+// Al soltar el scroll: si pasaste el 80% de la sección actual, la siguiente
+// se alinea automáticamente al tope de la pantalla (y en subida, la anterior).
+(function initSectionSnap() {
+  const ids = ['hero', 'countdown', 'location', 'carousel', 'dresscode', 'gifts', 'rsvp', 'thanks'];
+  const sections = ids.map(id => document.getElementById(id)).filter(Boolean);
+  if (sections.length < 2) return;
+
+  const THRESHOLD = 0.8;
+  const reducirMovimiento = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const overlay = document.getElementById('modal-overlay');
+
+  let lastY = window.scrollY;
+  let lastDir = 0;
+  let timer = null;
+  let justSnapped = false;
+
+  const topAbs = (el) => el.getBoundingClientRect().top + window.scrollY;
+
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    lastDir = y > lastY ? 1 : (y < lastY ? -1 : 0);
+    lastY = y;
+    clearTimeout(timer);
+    timer = setTimeout(maybeSnap, 140);
+  }, { passive: true });
+
+  function maybeSnap() {
+    // Ignora la evaluación posterior al snap programático (evita encadenar)
+    if (justSnapped) {
+      justSnapped = false;
+      return;
+    }
+    if (overlay && overlay.classList.contains('active')) return;
+    const y = window.scrollY;
+    if (lastDir === 0) return;
+
+    // Sección ancla: la última cuyo tope quedó por encima del scroll actual
+    let anchor = null;
+    for (const s of sections) {
+      if (topAbs(s) <= y + 1) anchor = s;
+    }
+    if (!anchor) return;
+
+    const idx = sections.indexOf(anchor);
+    const h = anchor.offsetHeight || 1;
+    const progress = Math.min(1, Math.max(0, (y - topAbs(anchor)) / h));
+
+    let target = null;
+    if (lastDir === 1 && progress >= THRESHOLD && idx < sections.length - 1) {
+      target = sections[idx + 1];
+    } else if (lastDir === -1 && progress <= 1 - THRESHOLD && idx > 0) {
+      target = sections[idx - 1];
+    }
+
+    if (!target) return;
+    justSnapped = true;
+    window.scrollTo({
+      top: topAbs(target),
+      behavior: reducirMovimiento ? 'auto' : 'smooth'
+    });
+  }
+})();

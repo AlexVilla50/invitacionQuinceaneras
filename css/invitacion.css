@@ -831,6 +831,28 @@ button {
   50% { opacity: 0.3; transform: translateY(6px); }
 }
 
+/* ===== SNAP: cada sección ocupa como mínimo una pantalla ===== */
+.countdown,
+.location,
+.carousel-section,
+.dresscode,
+.gifts,
+.rsvp,
+.thanks {
+  min-height: 100vh;
+  min-height: 100dvh;
+}
+
+.countdown,
+.location,
+.dresscode,
+.gifts,
+.rsvp {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 /* ===== SECTION 2: COUNTDOWN ===== */
 .countdown {
   position: relative;
