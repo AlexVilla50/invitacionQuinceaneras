@@ -970,7 +970,7 @@ button {
 .carousel {
   position: relative;
   width: 100%;
-  max-width: 600px;
+  max-width: 1000px;
   margin: 0 auto;
   overflow: hidden;
   border-radius: var(--radius);
@@ -980,7 +980,13 @@ button {
 .carousel::before {
   content: "";
   display: block;
-  padding-top: 133.33%; /* 3/4 (mobile) */
+  padding-top: 133.33%;
+}
+
+@media (min-width: 768px) {
+  .carousel::before {
+    padding-top: 75%; /* 4:3 ratio para desktop - más alto, se ve mejor en PC */
+  }
 }
 
 .carousel-track {
@@ -1016,8 +1022,8 @@ button {
   top: 50%;
   transform: translateY(-50%);
   z-index: 5;
-  width: 40px;
-  height: 40px;
+  width: 44px;
+  height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1028,9 +1034,11 @@ button {
   color: var(--color-text);
   transition: all 0.3s ease;
   opacity: 0;
+  touch-action: none;
 }
 
-.carousel:hover .carousel-btn {
+.carousel:hover .carousel-btn,
+.carousel:focus-within .carousel-btn {
   opacity: 1;
 }
 
@@ -1039,8 +1047,8 @@ button {
   color: var(--color-bg);
 }
 
-.carousel-prev { left: 0.75rem; }
-.carousel-next { right: 0.75rem; }
+.carousel-prev { left: 1rem; }
+.carousel-next { right: 1rem; }
 
 .carousel-dots {
   position: absolute;
@@ -1053,8 +1061,8 @@ button {
 }
 
 .carousel-dots span {
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: rgba(255, 255, 255, 0.3);
   transition: all 0.3s ease;
@@ -1063,8 +1071,19 @@ button {
 
 .carousel-dots span.active {
   background: var(--color-gold);
-  width: 24px;
+  width: 28px;
   border-radius: 4px;
+}
+
+@media (min-width: 768px) {
+  .carousel-dots span {
+    width: 12px;
+    height: 12px;
+  }
+  .carousel-dots span.active {
+    width: 32px;
+    border-radius: 4px;
+  }
 }
 
 /* ===== SECTION 5: DRESS CODE ===== */

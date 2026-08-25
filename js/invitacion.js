@@ -389,11 +389,11 @@ const modalContents = {
 
   dresscode: `
     <h3>Traje formal</h3>
-    <p class="dresscode-reserved-text">Se reservan colores fuertes, azul oscurito y azul rey para esta celebración. Te agradecemos elegir otra tonalidad para tu atuendo.</p>
+    <p class="dresscode-reserved-text">Se reservan colores fuertes, azul oscuro y azul rey para esta celebración. Te agradecemos elegir otra tonalidad para tu atuendo.</p>
     <div class="dresscode-modal-card dresscode-modal-single">
       <p class="dresscode-colors-text">Colores recomendados:</p>
       <div class="dresscode-figure dresscode-figure--contain">
-        <img src="img/dressCode.png" alt="Traje formal" loading="lazy">
+        <img src="../img/dressCode.png" alt="Traje formal" loading="lazy">
       </div>
     </div>
   `,
