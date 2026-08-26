@@ -1,6 +1,6 @@
 const { google } = require('googleapis');
 
-const SHEET_RANGE = process.env.SHEET_RANGE || 'Invitados!A:E';
+const SHEET_RANGE = process.env.SHEET_RANGE || 'BaseDatos!A:D';
 
 function normalizePhone(value) {
   return String(value || '').replace(/[^0-9]/g, '');
@@ -9,6 +9,7 @@ function normalizePhone(value) {
 function validate(payload) {
   const errors = [];
   const name = String(payload.name || '').trim();
+  const doc = String(payload.doc || '').trim();
   const phoneRaw = String(payload.phone || '').trim();
   const phone = normalizePhone(phoneRaw);
   const guests = parseInt(payload.guests, 10);
@@ -16,6 +17,9 @@ function validate(payload) {
 
   if (name.length < 2 || name.length > 120) {
     errors.push('El nombre debe tener entre 2 y 120 caracteres.');
+  }
+  if (doc.length < 3 || doc.length > 20) {
+    errors.push('El documento debe tener entre 3 y 20 caracteres.');
   }
   if (!/^\+?[0-9][0-9\s-]{6,19}$/.test(phoneRaw)) {
     errors.push('El teléfono no es válido.');
@@ -27,10 +31,10 @@ function validate(payload) {
     errors.push('El mensaje no puede superar los 500 caracteres.');
   }
 
-  return { errors, data: { name, phone, guests, message } };
+  return { errors, data: { name, doc, phone, guests, message } };
 }
 
-async function appendRow({ name, phone, guests, message }) {
+async function appendRow({ name, doc, phone, guests, message }) {
   const credentialsRaw = process.env.GOOGLE_SERVICE_ACCOUNT;
   const spreadsheetId = process.env.SHEET_ID;
 
@@ -47,7 +51,40 @@ async function appendRow({ name, phone, guests, message }) {
 
   const sheets = google.sheets({ version: 'v4', auth });
 
-  const timestamp = new Date().toISOString();
+  // Verificar si la hoja BaseDatos existe, si no crearla con encabezados
+  const spreadsheet = await sheets.spreadsheets.get({ spreadsheetId });
+  const sheetsList = spreadsheet.data.sheets || [];
+  const baseDatosSheet = sheetsList.find(
+    (sheet) => sheet.properties.title === 'BaseDatos'
+  );
+
+  if (!baseDatosSheet) {
+    // Crear la hoja BaseDatos
+    await sheets.spreadsheets.batchUpdate({
+      spreadsheetId,
+      requestBody: {
+        requests: [
+          {
+            addSheet: {
+              properties: {
+                title: 'BaseDatos'
+              }
+            }
+          }
+        ]
+      }
+    });
+
+    // Agregar encabezados
+    await sheets.spreadsheets.values.update({
+      spreadsheetId,
+      range: 'BaseDatos!A1:D1',
+      valueInputOption: 'USER_ENTERED',
+      requestBody: {
+        values: [['Nombre Completo', 'Documento', 'Invitados', 'Celular']]
+      }
+    });
+  }
 
   await sheets.spreadsheets.values.append({
     spreadsheetId,
@@ -55,7 +92,7 @@ async function appendRow({ name, phone, guests, message }) {
     valueInputOption: 'USER_ENTERED',
     insertDataOption: 'INSERT_ROWS',
     requestBody: {
-      values: [[timestamp, name, phone, guests, message]]
+      values: [[name, doc, guests, phone]]
     }
   });
 }

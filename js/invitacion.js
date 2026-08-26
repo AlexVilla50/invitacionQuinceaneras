@@ -451,6 +451,9 @@ const modalContents = {
       <label for="rsvp-name">Nombre completo</label>
       <input type="text" id="rsvp-name" required placeholder="Tu nombre">
 
+      <label for="rsvp-doc">Documento de identidad</label>
+      <input type="text" id="rsvp-doc" required placeholder="Cédula o documento">
+
       <label for="rsvp-phone">Teléfono / WhatsApp</label>
       <input type="tel" id="rsvp-phone" required placeholder="300 000 0000">
 
@@ -522,6 +525,7 @@ function handleRSVP(e) {
   e.preventDefault();
   const form = document.getElementById('rsvp-form');
   const name = document.getElementById('rsvp-name').value.trim();
+  const doc = document.getElementById('rsvp-doc').value.trim();
   const phone = document.getElementById('rsvp-phone').value.trim();
   const guests = document.getElementById('rsvp-guests').value;
   const message = document.getElementById('rsvp-message').value.trim();
@@ -529,7 +533,7 @@ function handleRSVP(e) {
   const status = document.getElementById('rsvp-status');
 
   function abrirWhatsApp() {
-    const text = `¡Hola Ana Sofia!%0A%0AConfirmo mi asistencia:%0A👤 Nombre: ${encodeURIComponent(name)}%0A📱 Tel: ${encodeURIComponent(phone)}%0A👥 Invitados: ${guests}%0A📝 Mensaje: ${encodeURIComponent(message || 'Ninguno')}`;
+    const text = `¡Hola Ana Sofia!%0A%0AConfirmo mi asistencia:%0A👤 Nombre: ${encodeURIComponent(name)}%0A🪪 Documento: ${encodeURIComponent(doc)}%0A📱 Tel: ${encodeURIComponent(phone)}%0A👥 Invitados: ${guests}%0A📝 Mensaje: ${encodeURIComponent(message || 'Ninguno')}`;
     window.open(`https://wa.me/${WA_NUMBER}?text=${text}`, '_blank');
   }
 
@@ -560,7 +564,7 @@ function handleRSVP(e) {
   fetch('/api/rsvp', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, phone, guests, message })
+    body: JSON.stringify({ name, doc, phone, guests, message })
   })
     .then(async (res) => {
       const data = await res.json().catch(() => ({}));
