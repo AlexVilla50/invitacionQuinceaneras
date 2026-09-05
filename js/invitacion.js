@@ -393,7 +393,7 @@ const modalContents = {
     <div class="dresscode-modal-card dresscode-modal-single">
       <p class="dresscode-colors-text">Colores recomendados:</p>
       <div class="dresscode-figure dresscode-figure--contain">
-        <img src="../img/dressCode.png" alt="Traje formal" loading="lazy">
+        <img src="../img/dressCodeII.png" alt="Traje formal" loading="lazy">
       </div>
     </div>
   `,
